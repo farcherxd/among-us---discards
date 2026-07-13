@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Among Us Discards</title>
+
 <style>
 *{
     margin:0;
@@ -11,158 +12,196 @@
     box-sizing:border-box;
     font-family:Arial, Helvetica, sans-serif;
 }
+
 body{
     background:#2f333b;
     color:white;
     padding:20px;
 }
+
 h1{
     text-align:center;
     margin-bottom:20px;
 }
+
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
     gap:15px;
 }
+
 .card{
     background:#50565f;
     border:2px solid #777;
     border-radius:12px;
-    padding:15px;
-
+    padding:12px 16px;
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
+
 .player{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:14px;
 }
-.colorBox{
-    width:45px;
-    height:45px;
-    border-radius:8px;
-    border:2px solid white;
+
+.crewmate{
+    width:60px;
+    height:auto;
+    user-select:none;
 }
+
 .name{
     font-weight:bold;
-    font-size:18px;
+    font-size:20px;
 }
+
 .buttons{
-    display:flex;
-    gap:8px;
+    display:grid;
+    grid-template-columns:repeat(2,18px);
+    grid-template-rows:repeat(2,18px);
+    gap:10px;
 }
+
 .btn{
-    width:28px;
-    height:28px;
+    width:18px;
+    height:18px;
     border-radius:50%;
-    border:3px solid transparent;
+    border:2px solid transparent;
     cursor:pointer;
-    opacity:.5;
     transition:.15s;
+    opacity:.6;
 }
+
 .btn:hover{
-    transform:scale(1.1);
+    transform:scale(1.15);
 }
+
 .selected{
     opacity:1;
     border-color:white;
-    box-shadow:0 0 10px white;
+    box-shadow:0 0 8px white;
 }
-.celeste{
-    background:#73F0FF;
-}
-.lima{
-    background:#7DFF68;
-}
-.amarillo{
-    background:#FFD23F;
-}
-.rojo{
-    background:#FF4C4C;
-}
+
+.celeste{background:#73F0FF;}
+.lima{background:#7DFF68;}
+.amarillo{background:#FFD23F;}
+.rojo{background:#FF4C4C;}
+
 footer{
     margin-top:30px;
     text-align:center;
     opacity:.7;
 }
+
 @media(max-width:600px){
+
 .card{
     flex-direction:column;
     gap:15px;
 }
+
 .buttons{
-    width:100%;
     justify-content:center;
 }
+
 }
 </style>
+
 </head>
+
 <body>
+
 <h1>Among Us Discards</h1>
+
 <div class="grid" id="grid"></div>
+
 <footer>
-Version 1.0.2
+Version 1.1.0
 </footer>
+
 <script>
+
 const players=[
-{name:"RED",color:"#C51111"},
-{name:"BLUE",color:"#132FD2"},
-{name:"YELLOW",color:"#F5F557"},
-{name:"GREEN",color:"#117F2D"},
-{name:"LIME",color:"#50EF39"},
-{name:"PINK",color:"#EC54BB"},
-{name:"ROSE",color:"#FF66CC"},
-{name:"MAROON",color:"#6B2F2F"},
-{name:"BROWN",color:"#71491E"},
-{name:"TAN",color:"#D2B48C"},
-{name:"GRAY",color:"#808080"},
-{name:"BLACK",color:"#3F474E"},
-{name:"PURPLE",color:"#6B30BC"},
-{name:"ORANGE",color:"#EF7D0D"},
-{name:"WHITE",color:"#D6E0F0"},
-{name:"BANANA",color:"#FFFF7E"},
-{name:"CYAN",color:"#00FFFF"},
-{name:"CORAL",color:"#FF7F50"}
+{name:"RED"},
+{name:"BLUE"},
+{name:"YELLOW"},
+{name:"GREEN"},
+{name:"LIME"},
+{name:"PINK"},
+{name:"ROSE"},
+{name:"MAROON"},
+{name:"BROWN"},
+{name:"TAN"},
+{name:"GRAY"},
+{name:"BLACK"},
+{name:"PURPLE"},
+{name:"ORANGE"},
+{name:"WHITE"},
+{name:"BANANA"},
+{name:"CYAN"},
+{name:"CORAL"}
 ];
+
 function shuffle(array){
-for(let i=array.length-1;i>0;i--){
-const j=Math.floor(Math.random()*(i+1));
-[array[i],array[j]]=[array[j],array[i]];
+    for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],array[j]]=[array[j],array[i]];
+    }
 }
-}
+
 shuffle(players);
+
 const grid=document.getElementById("grid");
+
 players.forEach(player=>{
-const card=document.createElement("div");
-card.className="card";
-card.innerHTML=`
-<div class="player">
-<div class="colorBox" style="background:${player.color}"></div>
-<div class="name">${player.name}</div>
-</div>
-<div class="buttons">
-<div class="btn celeste"></div>
-<div class="btn lima"></div>
-<div class="btn amarillo"></div>
-<div class="btn rojo"></div>
-</div>
-`;
-const buttons=card.querySelectorAll(".btn");
-buttons.forEach(btn=>{
-btn.onclick=()=>{
-if(btn.classList.contains("selected")){
-btn.classList.remove("selected");
-return;
-}
-buttons.forEach(b=>b.classList.remove("selected"));
-btn.classList.add("selected");
-};
+
+    const card=document.createElement("div");
+    card.className="card";
+
+    card.innerHTML=`
+    <div class="player">
+        <img class="crewmate" src="img/${player.name.toLowerCase()}.png">
+        <div class="name">${player.name}</div>
+    </div>
+
+    <div class="buttons">
+        <div class="btn celeste" data="cyan"></div>
+        <div class="btn lima" data="lime"></div>
+        <div class="btn amarillo" data="banana"></div>
+        <div class="btn rojo" data="red"></div>
+    </div>
+    `;
+
+    const img=card.querySelector(".crewmate");
+    const buttons=card.querySelectorAll(".btn");
+
+    buttons.forEach(btn=>{
+
+        btn.onclick=()=>{
+
+            if(btn.classList.contains("selected")){
+                btn.classList.remove("selected");
+                img.src=`img/${player.name.toLowerCase()}.png`;
+                return;
+            }
+
+            buttons.forEach(b=>b.classList.remove("selected"));
+
+            btn.classList.add("selected");
+
+            img.src=`img/${btn.getAttribute("data")}.png`;
+
+        }
+
+    });
+
+    grid.appendChild(card);
+
 });
-grid.appendChild(card);
-});
+
 </script>
+
 </body>
 </html>
